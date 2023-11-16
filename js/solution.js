@@ -11,6 +11,7 @@
       texts.push(item.innerText);
     }
 
+    console.log(`Elements count: ${items.length}`)
     console.log(texts);
   });
 })();
