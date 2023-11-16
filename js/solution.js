@@ -2,7 +2,7 @@
 
 (() => {
   document.addEventListener('DOMContentLoaded', () => {
-    const items = document.querySelectorAll('ul > li');
+    const items = document.querySelectorAll('li');
     const texts = [];
 
     for (const item of Array.from(items)) {
