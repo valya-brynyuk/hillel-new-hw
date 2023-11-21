@@ -1,31 +1,31 @@
 'use strict';
 
 (() => {
-  const generateList = (numArr) => {
-    if (!Array.isArray(numArr)) {
-      throw new Error('Only arrays with numbers are allowed');
-    }
+  const ROWS = 10;
+  const COLS = 10;
 
-    const list = document.createElement('ul');
-    for (const item of numArr) {
-      const li = document.createElement('li');
-      if (Array.isArray(item)) {
-        li.appendChild(generateList(item));
-      } else if (typeof item !== 'number') {
-        throw new Error('Only numbers supported in array');
-      } else {
-        li.innerText = item;
+  const createTable = (rows, cols) =>  {
+    const table = document.createElement('table');
+    let counter = 1;
+
+    for (let i = 0; i < rows; i += 1) {
+      const row = document.createElement('tr');
+
+      for (let j = 0; j < cols; j += 1) {
+        const td = document.createElement('td');
+        td.innerText = counter++;
+        row.appendChild(td);
       }
 
-      list.appendChild(li);
+      table.appendChild(row);
     }
 
-    return list;
+    return table;
   };
 
   document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(() => {
-      document.body.appendChild(generateList([1, 2, 3, [4, 5, 6, [7, 8], 9], 0]));
+      document.body.appendChild(createTable(ROWS, COLS));
     });
   })
 })();
