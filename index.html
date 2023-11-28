@@ -8,9 +8,26 @@
 <body>
 
 <section class="wrapper">
-    <button type="button" data-role="generate-preview-btn" class="button">Show random image</button>
-    <img src="" alt="" class="preview" data-role="preview">
+    <div class="gallery">
+        <img src="img/1.jpg" alt="1.jpg" data-role="image" class="gallery__item">
+        <img src="img/2.jpg" alt="2.jpg" data-role="image" class="gallery__item">
+        <img src="img/3.jpg" alt="3.jpg" data-role="image" class="gallery__item">
+        <img src="img/4.jpg" alt="4.jpg" data-role="image" class="gallery__item">
+        <img src="img/5.jpg" alt="5.jpg" data-role="image" class="gallery__item">
+    </div>
 </section>
+
+<dialog class="modal" data-role="modal">
+    <header class="modal__header">
+        <h3 class="modal__title" data-role="modal-title"></h3>
+        <button type="button" class="modal__close button" data-role="modal-close"></button>
+    </header>
+    <img src="" alt="" class="preview" data-role="preview">
+    <footer class="modal__footer">
+        <button type="button" class="modal__action button" data-role="prev-btn">Prev</button>
+        <button type="button" class="modal__action button" data-role="next-btn">Next</button>
+    </footer>
+</dialog>
 
 <script src="js/solution.js"></script>
 </body>

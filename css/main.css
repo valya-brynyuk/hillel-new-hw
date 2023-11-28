@@ -4,7 +4,7 @@
 
 .wrapper {
     display: flex;
-    gap: 1rem;
+    gap: 16px;
     width: min(980px, 90%);
     margin: 0 auto;
     align-items: center;
@@ -38,4 +38,86 @@
 .button:hover {
     background-color: white;
     color: blue;
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    grid-template-rows: 1fr;
+}
+
+.gallery__item {
+    object-fit: cover;
+    border-radius: 5px;
+    transform: translateY(0);
+    transition: transform .2s ease-in-out, box-shadow .2s ease-in-out;
+    cursor: pointer;
+    overflow: hidden;
+    height: 150px;
+    width: 150px;
+}
+
+.gallery__item:hover {
+    transform: translateY(-1rem);
+    box-shadow: 5px 5px 10px 10px rgba(0, 0, 0, .2);
+}
+
+.modal {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+    border: none;
+    box-shadow: 5px 5px 10px 10px rgba(0, 0, 0, .2);
+    border-radius: 5px;
+}
+
+.modal::backdrop {
+    background-color: rgba(0, 0, 255, .56);
+    backdrop-filter: blur(10px);
+}
+
+.modal[open] {
+    display: flex;
+}
+
+.modal__footer,
+.modal__header {
+    display: flex;
+    gap: 24px;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+.modal__close {
+    padding: 0;
+    position: relative;
+    margin: 0;
+    height: 24px;
+    width: 24px;
+    flex-shrink: 0;
+    min-height: unset;
+}
+
+.modal__close::before,
+.modal__close::after {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    height: 16px;
+    width: 2px;
+    background-color: white;
+    transform: rotate(45deg) translate(-8px, -5px);
+    transition: background-color .2s ease-in-out;
+}
+
+.modal__close::after {
+    transform: rotate(-45deg) translate(5px, -8px);
+}
+
+.modal__close:hover::before,
+.modal__close:hover::after {
+    background-color: blue;
 }
