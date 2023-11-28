@@ -1,18 +1,24 @@
 'use strict';
 
 (() => {
-  const ACTIVE_CLASS = 'show';
+  const AVAILABLE_IMAGES = [
+    '1.jpg',
+    '2.jpg',
+    '3.jpg',
+    '4.jpg',
+    '5.jpg',
+  ];
+  const IMAGE_PATH = 'img';
 
   document.addEventListener('DOMContentLoaded', () => {
-    const input = document.querySelector('[data-role="input"]');
-    const ghostBlock = document.querySelector('[data-role="ghost-block"]');
+    const generatePreviewBtn = document.querySelector('[data-role="generate-preview-btn"]');
+    const preview = document.querySelector('[data-role="preview"]');
 
-    input.addEventListener('focus', () => {
-      ghostBlock.classList.add(ACTIVE_CLASS);
-    });
+    generatePreviewBtn.addEventListener('click', () => {
+      const index = Math.floor(Math.random() * 100 % AVAILABLE_IMAGES.length);
 
-    input.addEventListener('blur', () => {
-      ghostBlock.classList.remove(ACTIVE_CLASS);
+      preview.src = `${IMAGE_PATH}/${AVAILABLE_IMAGES[index]}`;
+      preview.alt = AVAILABLE_IMAGES[index];
     });
   })
 })();
