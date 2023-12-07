@@ -3,32 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="css/main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 </head>
 <body>
+<main>
+    <div class="container">
+        <div class="row">
+            <h1 class="text-center mb-5 mt-5">
+                Please fill in information
+            </h1>
+        </div>
+        <div class="row">
+            <div class="col-12">
 
-<section class="wrapper">
-    <div class="gallery">
-        <img src="img/1.jpg" alt="1.jpg" data-role="image" class="gallery__item">
-        <img src="img/2.jpg" alt="2.jpg" data-role="image" class="gallery__item">
-        <img src="img/3.jpg" alt="3.jpg" data-role="image" class="gallery__item">
-        <img src="img/4.jpg" alt="4.jpg" data-role="image" class="gallery__item">
-        <img src="img/5.jpg" alt="5.jpg" data-role="image" class="gallery__item">
+                <form id="form" action="result.html">
+
+                    <div class="mb-3">
+                        <label class="form-label">Email address</label>
+                        <input name="email" type="email" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">First name</label>
+                        <input name="firstName" type="text" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Last name</label>
+                        <input name="lastName" type="email" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nickname</label>
+                        <input name="nickname" type="text" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input name="password" type="password" class="form-control">
+                    </div>
+
+                    <div class="mb-3 ">
+                        <label class="form-label">Select an option</label>
+                        <select name="option" class="form-select">
+                            <option value="1">Option 1</option>
+                            <option value="2">Option 2</option>
+                            <option value="3">Option 3</option>
+                            <option value="4">Option 4</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3 ">
+                        <label class="form-label">Type in your message</label>
+                        <textarea
+                                class="form-control"
+                                placeholder="Leave a comment here"
+                                style="height: 100px"
+                                name="message"
+                        ></textarea>
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Default file input example</label>
+                        <input name="file" class="form-control" type="file">
+                    </div>
+
+
+                    <div class="mb-3 form-check">
+                        <input name="terms" type="checkbox" class="form-check-input">
+                        <label class="form-check-label" >Согласен с условиями</label>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+
+
+                </form>
+
+
+
+            </div>
+        </div>
     </div>
-</section>
+</main>
 
-<dialog class="modal" data-role="modal">
-    <header class="modal__header">
-        <h3 class="modal__title" data-role="modal-title"></h3>
-        <button type="button" class="modal__close button" data-role="modal-close"></button>
-    </header>
-    <img src="" alt="" class="preview" data-role="preview">
-    <footer class="modal__footer">
-        <button type="button" class="modal__action button" data-role="prev-btn">Prev</button>
-        <button type="button" class="modal__action button" data-role="next-btn">Next</button>
-    </footer>
-</dialog>
 
-<script src="js/solution.js"></script>
+
+<script src="js/script.js"></script>
 </body>
 </html>
