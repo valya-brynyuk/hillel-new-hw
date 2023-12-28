@@ -7,12 +7,36 @@ import * as sassCompiller from 'sass';
 import gulpSass from 'gulp-sass';
 import autoprefixer from 'gulp-autoprefixer';
 import sourcemaps from 'gulp-sourcemaps';
+import gulpCopy from 'gulp-copy';
+import gulpClean from 'gulp-clean';
+import browserSync from 'browser-sync';
 
 const CWD = dirname(fileURLToPath(import.meta.url));
 const SRC = join(CWD, 'src');
 const STYLES_SRC = join(SRC, 'sass', '*.sass');
 const DIST = join(CWD, 'dist');
 const sass = gulpSass(sassCompiller);
+const sync = browserSync.create()
+
+export function serve() {
+  sync.init({
+    server: DIST,
+  })
+}
+
+export function copyFiles() {
+  return gulp.src([join(SRC, 'img', '*'), join(SRC, '*.html')])
+    .pipe(gulpCopy(DIST, {
+      prefix: 1
+    }));
+}
+
+export function clean() {
+  return gulp.src(DIST, {allowEmpty: true})
+    .pipe(gulpClean({
+      force: true,
+    }));
+}
 
 export function buildStyles() {
   return gulp.src(STYLES_SRC)
@@ -23,4 +47,6 @@ export function buildStyles() {
     .pipe(gulp.dest(join(DIST, 'style')));
 }
 
-export const watch = () => gulp.watch(STYLES_SRC, gulp.series(buildStyles));
+export const watch = gulp.series(clean, copyFiles, () => gulp.watch(STYLES_SRC, gulp.series(buildStyles)));
+
+export const build = gulp.series(clean, copyFiles, buildStyles);
