@@ -47,6 +47,7 @@ export function buildStyles() {
     .pipe(gulp.dest(join(DIST, 'style')));
 }
 
-export const watch = gulp.series(clean, copyFiles, () => gulp.watch(STYLES_SRC, gulp.series(buildStyles)));
-
 export const build = gulp.series(clean, copyFiles, buildStyles);
+
+// non posix path style issue
+export const watch = gulp.series(build, gulp.parallel(() => gulp.watch(`src/sass/*.sass`, buildStyles), serve));
