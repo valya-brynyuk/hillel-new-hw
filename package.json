@@ -4,11 +4,9 @@
   "description": "Создайте директорию layout-project для своего проекта\r     Установите таск-менеджер Gulp и проверьте, чтобы версия была не ниже 4.0\r     Создайте приблизительную структуру вашего проекта. Вы можете придумать её самостоятельно или взять пример из урока. Главное — наличие отдельных директорий под версию для разработки и версию после работы таск-менеджера Gulp\r     Залить все на GITHub",
   "main": "index.js",
   "scripts": {
-    "dev": "gulp buildStyles",
-    "copy": "gulp copyFiles",
-    "clean": "gulp clean",
-    "build": "gulp build",
-    "serve": "gulp serve",
+    "watch:dist": "gulp watchDist",
+    "watch:images": "gulp watchImages",
+    "watch:sass": "gulp watchSass",
     "watch": "gulp watch"
   },
   "keywords": [],
