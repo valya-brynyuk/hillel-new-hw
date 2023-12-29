@@ -10,10 +10,13 @@ import sourcemaps from 'gulp-sourcemaps';
 import gulpCopy from 'gulp-copy';
 import gulpClean from 'gulp-clean';
 import browserSync from 'browser-sync';
+import pug from 'gulp-pug';
+
 
 const CWD = dirname(fileURLToPath(import.meta.url));
 const SRC = join(CWD, 'src');
 const STYLES_SRC = join(SRC, 'sass', '*.sass');
+const PUG_SRC = join(SRC, 'pug', '*.pug');
 const DIST = join(CWD, 'dist');
 const sass = gulpSass(sassCompiller);
 const sync = browserSync.create()
@@ -25,7 +28,7 @@ export function serve() {
 }
 
 export function copyFiles() {
-  return gulp.src([join(SRC, 'img', '*'), join(SRC, '*.html')])
+  return gulp.src(join(SRC, 'img', '*'))
     .pipe(gulpCopy(DIST, {
       prefix: 1
     }));
@@ -47,7 +50,15 @@ export function buildStyles() {
     .pipe(gulp.dest(join(DIST, 'style')));
 }
 
-export const build = gulp.series(clean, copyFiles, buildStyles);
+export function buildPug() {
+  return gulp.src(PUG_SRC)
+    .pipe(sourcemaps.init())
+    .pipe(pug())
+    .pipe(sourcemaps.write(DIST))
+    .pipe(gulp.dest(DIST));
+}
+
+export const build = gulp.series(clean, copyFiles, gulp.parallel(buildPug, buildStyles));
 
 // non posix path style issue
-export const watch = gulp.series(build, gulp.parallel(() => gulp.watch(`src/sass/*.sass`, buildStyles), serve));
+export const development = gulp.series(build, gulp.parallel(() => gulp.watch(`src/pug/*.pug`, buildPug), () => gulp.watch(`src/sass/*.sass`, buildStyles), serve));
