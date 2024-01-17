@@ -3,27 +3,22 @@
 (() => {
   const model = {
     items: new Map(),
-    getId() {
-      return `${Date.now()}`.replaceAll(/\D/gis, '-');
-    },
-    getStoreKey() {
-      return 'todo-items';
-    },
     addItem(item) {
-      const id = this.getId();
+      const id = this.newId;
       item.id = id;
-      this.items.set(id, item);
-
-      this.save();
+      this.newItem = {
+        id,
+        item,
+      };
 
       return item;
     },
     save() {
       const payload = Array.from(this.items.values());
-      localStorage.setItem(this.getStoreKey(), JSON.stringify(payload));
+      localStorage.setItem(this.storeKey, JSON.stringify(payload));
     },
     load() {
-      const storedItems = JSON.parse(localStorage.getItem(this.getStoreKey()) ?? '[]');
+      const storedItems = JSON.parse(localStorage.getItem(this.storeKey) ?? '[]');
       if (!Array.isArray(storedItems)) {
         return;
       }
@@ -38,16 +33,31 @@
     },
   };
 
+  Object.defineProperty(model, 'newId', {
+    get() {
+      return `${Date.now()}`.replaceAll(/\D/gis, '-');
+    },
+  });
+
+  Object.defineProperty(model, 'storeKey', {
+    get() {
+      return 'todo-items';
+    },
+  });
+
+  Object.defineProperty(model, 'newItem', {
+    set({id, item}) {
+      this.items.set(id, item);
+      this.save();
+    },
+  });
+
   const view = {
     items: new Map(),
     form: document.querySelector('#todoForm'),
     list: document.querySelector('#todoItems'),
-    getItemTemplate() {
-      const template = document.querySelector('#task-template');
-      return template.content.cloneNode(true);
-    },
     addItem(id, item) {
-      const template = this.getItemTemplate();
+      const template = this.itemTemplate;
       const itemWrapper = template.querySelector('[data-component="todo-item"]');
       const titleEl = itemWrapper.querySelector('[data-role="title"]');
       const descEl = itemWrapper.querySelector('[data-role="desc"]');
@@ -58,7 +68,10 @@
       titleEl.innerText = item.title;
       descEl.innerText = item.description;
 
-      this.items.set(id, itemWrapper);
+      this.newItem = {
+        id,
+        itemWrapper,
+      }
 
       requestAnimationFrame(() => {
         this.list.prepend(itemWrapper);
@@ -73,6 +86,19 @@
       });
     }
   };
+
+  Object.defineProperty(view, 'newItem', {
+    set({id, itemWrapper}) {
+      this.items.set(id, itemWrapper);
+    },
+  });
+
+  Object.defineProperty(view, 'itemTemplate', {
+    get() {
+      const template = document.querySelector('#task-template');
+      return template.content.cloneNode(true);
+    },
+  });
 
 
   const controller = {
