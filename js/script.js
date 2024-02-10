@@ -1,145 +1,50 @@
 'use strict';
 
 (() => {
-  const model = {
-    items: new Map(),
-    addItem(item) {
-      const id = this.newId;
-      item.id = id;
-      this.newItem = {
-        id,
-        item,
-      };
-
-      return item;
+  let user = {
+    name: 'John',
+    surname: 'Dog',
+    get fullName() {
+      return `${this.name} ${this.surname}`;
     },
-    save() {
-      const payload = Array.from(this.items.values());
-      localStorage.setItem(this.storeKey, JSON.stringify(payload));
-    },
-    load() {
-      const storedItems = JSON.parse(localStorage.getItem(this.storeKey) ?? '[]');
-      if (!Array.isArray(storedItems)) {
-        return;
+    set fullName(value) {
+      if (!value.length) {
+        throw new Error('Full name can not be empty');
+      } else if (value.indexOf(' ') < 0) {
+        throw new Error('Full name must contain name & surname divided with space');
       }
 
-      for (const item of storedItems) {
-        this.items.set(item.id, item);
-      }
-    },
-    removeItem(id) {
-      this.items.delete(id);
-      this.save();
-    },
-  };
+      const parts = value.split(' ');
 
-  Object.defineProperty(model, 'newId', {
-    get() {
-      return `${Date.now()}`.replaceAll(/\D/gis, '-');
-    },
-  });
-
-  Object.defineProperty(model, 'storeKey', {
-    get() {
-      return 'todo-items';
-    },
-  });
-
-  Object.defineProperty(model, 'newItem', {
-    set({id, item}) {
-      this.items.set(id, item);
-      this.save();
-    },
-  });
-
-  const view = {
-    items: new Map(),
-    form: document.querySelector('#todoForm'),
-    list: document.querySelector('#todoItems'),
-    addItem(id, item) {
-      const template = this.itemTemplate;
-      const itemWrapper = template.querySelector('[data-component="todo-item"]');
-      const titleEl = itemWrapper.querySelector('[data-role="title"]');
-      const descEl = itemWrapper.querySelector('[data-role="desc"]');
-      const removeBtn = itemWrapper.querySelector('[data-role="remove-btn"]');
-
-      removeBtn.dataset.action = 'remove';
-      removeBtn.dataset.id = id;
-      titleEl.innerText = item.title;
-      descEl.innerText = item.description;
-
-      this.newItem = {
-        id,
-        itemWrapper,
-      }
-
-      requestAnimationFrame(() => {
-        this.list.prepend(itemWrapper);
-      })
-
-      return itemWrapper;
-    },
-    removeItem(id) {
-      requestAnimationFrame(() => {
-        this.items.get(id).remove();
-        this.items.delete(id);
-      });
+      this.name = parts[0];
+      this.surname = parts[1];
     }
-  };
 
-  Object.defineProperty(view, 'newItem', {
-    set({id, itemWrapper}) {
-      this.items.set(id, itemWrapper);
-    },
+  }
+
+  console.log(user.fullName)
+  user.fullName = 'Kyle Gwein'
+  console.log(user.name)
+  console.log(user.surname)
+
+  Object.defineProperty(user, 'name', {
+    writable: false
   });
 
-  Object.defineProperty(view, 'itemTemplate', {
-    get() {
-      const template = document.querySelector('#task-template');
-      return template.content.cloneNode(true);
-    },
+  Object.defineProperty(user, 'age', {
+    value: 20,
+    enumerable: false
   });
 
 
-  const controller = {
-    init() {
-      view.form.addEventListener('submit', this.formSubmitHandler.bind(this));
-      document.addEventListener('DOMContentLoaded', controller.loadHandler.bind(this));
-      this.itemClickHandler = this.itemClickHandler.bind(this);
-    },
-    itemRemoveHandler(id) {
-      model.removeItem(id);
-      view.removeItem(id);
-    },
-    itemClickHandler({target}) {
+  for (const key in user) {
+    console.log(key, user[key])
+  }
 
-      if (target.dataset.action === 'remove') {
-        this.itemRemoveHandler(target.dataset.id);
-      }
-    },
-    formSubmitHandler(e) {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const itemData = {};
-      for (const [name, val] of formData.entries()) {
-        itemData[name] = val;
-      }
+  console.log(Object.keys(user))
 
-      const storedItem = model.addItem(itemData);
-      const itemEl = view.addItem(storedItem.id, storedItem);
-      itemEl.addEventListener('click', this.itemClickHandler);
-
-      view.form.reset();
-    },
-    loadHandler() {
-      model.load();
-
-      for (const [id, item] of model.items) {
-        const itemEl = view.addItem(id, item);
-        itemEl.addEventListener('click', this.itemClickHandler);
-      }
-    },
-  };
-
-  controller.init();
+  user = Object.freeze(user);
+  Object.defineProperty(user, 'age', {
+    value: 25
+  })
 })();

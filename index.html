@@ -9,54 +9,6 @@
 </head>
 <body>
 
-<main>
-    <h1 class="text-center mt-5 mb-5">TODO LIST</h1>
-    <div class="container">
-        <div class="row">
-
-            <div class="col-4">
-                <form id="todoForm">
-                    <div class="mb-3">
-                        <label class="form-label">Task title</label>
-                        <input type="text" required name="title" class="form-control" placeholder="Title">
-                    </div>
-                    <div class="mb-3">
-                        <label  class="form-label">Task body</label>
-                        <textarea name="description" required class="form-control" placeholder="Task body" cols="30" rows="10"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Create Task!</button>
-                </form>
-            </div>
-
-
-            <template id="task-template">
-                <div class="col-4" data-component="todo-item">
-                    <div class="taskWrapper">
-                        <div class="taskHeading" data-role="title"></div>
-                        <div class="taskDescription" data-role="desc"></div>
-                        <button class="btn btn-sm btn-danger" type="button" data-role="remove-btn">X</button>
-                    </div>
-                </div>
-            </template>
-
-
-            <div class="col-8">
-                <div class="row" id="todoItems">
-
-<!--                    <div class="col-4">-->
-<!--                        <div class="taskWrapper">-->
-<!--                            <div class="taskHeading">Title</div>-->
-<!--                            <div class="taskDescription">Task body</div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-</main>
 
 </body>
 </html>
