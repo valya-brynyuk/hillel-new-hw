@@ -1,50 +1,100 @@
 'use strict';
 
 (() => {
-  let user = {
-    name: 'John',
-    surname: 'Dog',
-    get fullName() {
-      return `${this.name} ${this.surname}`;
-    },
-    set fullName(value) {
-      if (!value.length) {
-        throw new Error('Full name can not be empty');
-      } else if (value.indexOf(' ') < 0) {
-        throw new Error('Full name must contain name & surname divided with space');
-      }
-
-      const parts = value.split(' ');
-
-      this.name = parts[0];
-      this.surname = parts[1];
+  const reverseIterator = (arr) => {
+    if (!Array.isArray(arr)) {
+      throw new Error('Param must be an array');
     }
 
+    return {
+      [Symbol.iterator]() {
+        const arrCopy = [...arr];
+        let index = arrCopy.length - 1;
+
+        return {
+          next() {
+            if (index < 0) {
+              return {
+                done: true
+              };
+            }
+
+            return {
+              done: false,
+              value: arrCopy[index--]
+            };
+          }
+        }
+      }
+    }
+  };
+
+
+  for (const i of reverseIterator([1, 2, 3, 4])) {
+    console.log(i);
   }
 
-  console.log(user.fullName)
-  user.fullName = 'Kyle Gwein'
-  console.log(user.name)
-  console.log(user.surname)
 
-  Object.defineProperty(user, 'name', {
-    writable: false
-  });
+  function* fibonachi() {
+    let last = 0;
+    let current = 0;
 
-  Object.defineProperty(user, 'age', {
-    value: 20,
-    enumerable: false
-  });
+    while (true) {
+      yield current;
 
+      const tmpCurrent = current;
+      current += last;
+      last = tmpCurrent;
 
-  for (const key in user) {
-    console.log(key, user[key])
+      if (!current) {
+        current = 1;
+      }
+    }
   }
 
-  console.log(Object.keys(user))
+  const fib = fibonachi();
 
-  user = Object.freeze(user);
-  Object.defineProperty(user, 'age', {
-    value: 25
-  })
+  console.log(fib.next().value);
+  console.log(fib.next().value);
+  console.log(fib.next().value);
+  console.log(fib.next().value);
+  console.log(fib.next().value);
+  console.log(fib.next().value);
+  console.log(fib.next().value);
+  console.log(fib.next().value);
+
+  const keysIterator = (obj) => {
+    if (typeof obj !== "object") {
+      throw new Error('PAram must be an object');
+    }
+
+    return {
+      [Symbol.iterator]() {
+        const keys = Object.keys(obj);
+        let index = 0;
+
+        return {
+          next() {
+            if (index >= keys.length) {
+              return {
+                done: true
+              };
+            }
+
+            return {
+              done: false,
+              value: keys[index++]
+            };
+          }
+        }
+      }
+    }
+  };
+
+
+  for (const k of keysIterator({a: 1, b: 2, c: 3})) {
+    console.log(k);
+  }
+
+
 })();
