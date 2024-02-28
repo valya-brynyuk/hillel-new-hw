@@ -1,100 +1,65 @@
 'use strict';
 
 (() => {
-  const reverseIterator = (arr) => {
-    if (!Array.isArray(arr)) {
-      throw new Error('Param must be an array');
+  function Human(name, age) {
+    if (!Number.isFinite(age) || age <= 0) {
+      throw new Error('Age must ba a valid positive number');
     }
 
-    return {
-      [Symbol.iterator]() {
-        const arrCopy = [...arr];
-        let index = arrCopy.length - 1;
+    this.name = name;
+    this.age = age;
 
-        return {
-          next() {
-            if (index < 0) {
-              return {
-                done: true
-              };
-            }
-
-            return {
-              done: false,
-              value: arrCopy[index--]
-            };
-          }
-        }
-      }
-    }
-  };
-
-
-  for (const i of reverseIterator([1, 2, 3, 4])) {
-    console.log(i);
-  }
-
-
-  function* fibonachi() {
-    let last = 0;
-    let current = 0;
-
-    while (true) {
-      yield current;
-
-      const tmpCurrent = current;
-      current += last;
-      last = tmpCurrent;
-
-      if (!current) {
-        current = 1;
-      }
+    Human.prototype.showInfo = function() {
+      console.log(`Hi, I'm ${this.name} and I have ${this.age} years old.`);
     }
   }
 
-  const fib = fibonachi();
+  function Car(brand, model, year, number) {
+    this.brand = brand;
+    this.model = model;
+    this.year = year;
+    this.number = number;
+    this.owner = null;
 
-  console.log(fib.next().value);
-  console.log(fib.next().value);
-  console.log(fib.next().value);
-  console.log(fib.next().value);
-  console.log(fib.next().value);
-  console.log(fib.next().value);
-  console.log(fib.next().value);
-  console.log(fib.next().value);
-
-  const keysIterator = (obj) => {
-    if (typeof obj !== "object") {
-      throw new Error('PAram must be an object');
-    }
-
-    return {
-      [Symbol.iterator]() {
-        const keys = Object.keys(obj);
-        let index = 0;
-
-        return {
-          next() {
-            if (index >= keys.length) {
-              return {
-                done: true
-              };
-            }
-
-            return {
-              done: false,
-              value: keys[index++]
-            };
-          }
-        }
+    Car.prototype.setOwner = function(owner) {
+      if (!(owner instanceof Human)) {
+        throw new Error('Owner must be a human');
+      } else if (owner.age < 18) {
+        throw new Error('Owner must be older than 18 years old');
       }
-    }
-  };
 
+      this.owner = owner;
+    };
 
-  for (const k of keysIterator({a: 1, b: 2, c: 3})) {
-    console.log(k);
+    Car.prototype.showInfo = function () {
+      console.log(`Brand: ${this.brand}`);
+      console.log(`Model: ${this.model}`);
+      console.log(`Year: ${this.year}`);
+      console.log(`Number: ${this.number}`);
+
+      if (this.owner) {
+        console.log(`Owner: `);
+        this.owner.showInfo();
+      } else {
+        console.log('Car has no owner')
+      }
+    };
   }
 
+  const human1 = new Human('John Doe', 31);
+  const human2 = new Human('Paul Gilbert', 25);
+  const human3 = new Human('Batman', 40);
+
+  const car1 = new Car('Audi', 'R8', 2023, '23424');
+  const car2 = new Car('VolksWagen', 'Passat', 1996, '44424');
+  const car3 = new Car('BatMobil', 'Turbo+', 1990, '1111');
+
+  car1.setOwner(human1);
+  car2.setOwner(human2);
+  car3.setOwner(human3);
+
+  car1.showInfo();
+  car2.showInfo();
+  car3.showInfo();
 
 })();
