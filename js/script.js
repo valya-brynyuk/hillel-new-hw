@@ -54,12 +54,18 @@
   const car2 = new Car('VolksWagen', 'Passat', 1996, '44424');
   const car3 = new Car('BatMobil', 'Turbo+', 1990, '1111');
 
-  car1.setOwner(human1);
-  car2.setOwner(human2);
-  car3.setOwner(human3);
+  try {
+    car1.setOwner(human1);
+    car2.setOwner(human2);
+    car3.setOwner(human3);
 
-  car1.showInfo();
-  car2.showInfo();
-  car3.showInfo();
+    car1.showInfo();
+    car2.showInfo();
+    car3.showInfo();
+  } catch (e) {
+    console.error(e);
+  }
+
+
 
 })();
