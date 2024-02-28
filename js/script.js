@@ -5,25 +5,31 @@
   const MARK_THRESHOLD = 90;
   const PRESENT_THRESHOLD = 0.9;
 
-  function Student(name, surname, birthYear) {
-    if (!Number.isFinite(birthYear)) {
-      throw new Error('Year must be a valid number');
-    } else if (((new Date()).getFullYear() - birthYear) >= 120) {
-      throw new Error('Student is too old')
+  class Student {
+    name = '';
+    surname = '';
+    birthYear = '';
+    marks = [];
+    presents = new Array(WORK_DAYS);
+    presentIndex = 0;
+
+    constructor(name, surname, birthYear) {
+      if (!Number.isFinite(birthYear)) {
+        throw new Error('Year must be a valid number');
+      } else if (((new Date()).getFullYear() - birthYear) >= 120) {
+        throw new Error('Student is too old')
+      }
+
+      this.name = name;
+      this.surname = surname;
+      this.birthYear = birthYear;
     }
 
-    this.name = name;
-    this.surname = surname;
-    this.birthYear = birthYear;
-    this.marks = [];
-    this.presents = new Array(WORK_DAYS);
-    this.presentIndex = 0;
-
-    Student.prototype.getAge = function () {
+    getAge() {
       return (new Date()).getFullYear() - this.birthYear;
-    };
+    }
 
-    Student.prototype.getAvgMark = function () {
+    getAvgMark() {
       if (!this.marks.length) {
         return 0;
       }
@@ -35,18 +41,18 @@
       }, 0);
 
       return Math.round((markSum / this.marks.length) * 100) / 100;
-    };
+    }
 
-    Student.prototype._setVisited = function(visited) {
+    #setVisited(visited) {
       if (this.presentIndex >= WORK_DAYS) {
         throw new Error('Student won`t work more than expected');
       }
 
       this.presents[this.presentIndex] = Boolean(visited);
       this.presentIndex++;
-    };
+    }
 
-    Student.prototype._getAvgVisited = function() {
+    #getAvgVisited() {
         const visitedCount = this.presents.reduce((acc, curr) => {
           if (curr) {
             acc++;
@@ -56,19 +62,19 @@
         }, 0);
 
         return Math.round(visitedCount / WORK_DAYS * 100) / 100;
-    };
+    }
 
-    Student.prototype.present = function() {
-      this._setVisited(true);
-    };
+    present() {
+      this.#setVisited(true);
+    }
 
-    Student.prototype.absent = function() {
-      this._setVisited(false);
-    };
+    absent() {
+      this.#setVisited(false);
+    }
 
-    Student.prototype.summary = function() {
+    summary() {
       const avgMark = this.getAvgMark();
-      const avgPresent = this._getAvgVisited();
+      const avgPresent = this.#getAvgVisited();
 
       if (avgMark > MARK_THRESHOLD && avgPresent > PRESENT_THRESHOLD) {
         return 'Молодець!';
@@ -77,9 +83,9 @@
       }
 
       return 'Добре, але можна краще';
-    };
+    }
 
-    Student.prototype.addMark = function(mark) {
+    addMark(mark) {
       if (!Number.isFinite(mark)) {
         throw new Error('Mark must be a valid number')
       } else if (mark < 0 || mark > 100) {
@@ -89,9 +95,9 @@
       this.marks.push(mark);
     }
 
-    Student.prototype.getInfo = function () {
-      return `I'm ${this.surname} ${this.name}. I have ${this.getAge()} years old. My avg mark is ${this.getAvgMark()}. My presents was ${this._getAvgVisited()}.`;
-    };
+    getInfo() {
+      return `I'm ${this.surname} ${this.name}. I have ${this.getAge()} years old. My avg mark is ${this.getAvgMark()}. My presents was ${this.#getAvgVisited()}.`;
+    }
   }
 
 
