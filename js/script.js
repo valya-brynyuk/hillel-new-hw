@@ -46,15 +46,17 @@
     };
   }
 
-  const human1 = new Human('John Doe', 31);
-  const human2 = new Human('Paul Gilbert', 25);
-  const human3 = new Human('Batman', 40);
-
-  const car1 = new Car('Audi', 'R8', 2023, '23424');
-  const car2 = new Car('VolksWagen', 'Passat', 1996, '44424');
-  const car3 = new Car('BatMobil', 'Turbo+', 1990, '1111');
-
   try {
+
+    const human1 = new Human('John Doe', 31);
+    const human2 = new Human('Paul Gilbert', 25);
+    const human3 = new Human('Batman', 40);
+
+    const car1 = new Car('Audi', 'R8', 2023, '23424');
+    const car2 = new Car('VolksWagen', 'Passat', 1996, '44424');
+    const car3 = new Car('BatMobil', 'Turbo+', 1990, '1111');
+
+
     car1.setOwner(human1);
     car2.setOwner(human2);
     car3.setOwner(human3);
