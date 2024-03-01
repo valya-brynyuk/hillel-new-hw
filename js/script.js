@@ -1,80 +1,28 @@
 'use strict';
 
 (() => {
-  class TaskManager {
-    #tasks = new Map();
-
-    #sanitizeDescription = (desc) => {
-      if (typeof desc !== 'string') {
-        throw new Error('Description must be a valid string');
-      } else if (!desc.trim().length) {
-        throw new Error('Can not process empty task');
-      }
-      
-      return desc.trim();
+  const analyzeText = (text) => {
+    if (typeof text !== 'string') {
+      throw new Error('text must be a valid string');
     }
 
-    #validateId = (id) => {
-      if (!['string', 'number', 'symbol'].includes(typeof id)) {
-        throw new Error('Unsupported id type');
-      }
-    }
-    
-    addTask = (id, description) => {
-      this.#validateId(id);
-      if (this.#tasks.has(id)) {
-        throw new Error('Task already exists');
-      }
+    const normalizedText = text.trim().toLowerCase().replaceAll(/[0-9!@#$%^&*\(\)_+=\-;:\/\\.><\[\]\{\},?]/gis, '');
+    const words = normalizedText.split(' ');
+    const wordsRegistry = new Set(words);
 
-      const desc = this.#sanitizeDescription(description);
+    return {
+      uniqueWordsCount: wordsRegistry.size,
+      uniqueWords: Array.from(wordsRegistry),
+    };
+  };
 
-      this.#tasks.set(id, desc);
-    }
-
-    removeTask = (id) => {
-      this.#validateId(id);
-      if (!this.#tasks.has(id)) {
-        throw new Error('Task with this id not found');
-      }
-
-      this.#tasks.delete(id);
-    }
-
-    findTask = (id) => {
-      this.#validateId(id);
-      if (!this.#tasks.has(id)) {
-        throw new Error('Task with this id not found');
-      }
-
-      return this.#tasks.get(id);
-    }
-
-    displayTasks = () => {
-      for (const [id, desc] of this.#tasks.entries()) {
-        console.log(`ID: ${id}; Task: ${desc}`);
-      }
-    }
-
-    updateTaskDescription  = (id, description) => {
-      this.#validateId(id);
-      if (!this.#tasks.has(id)) {
-        throw new Error('Task with this id not found');
-      }
-
-      const desc = this.#sanitizeDescription(description);
-
-      this.#tasks.set(id, desc);
-    }
-  }
 
 try {
-    const taskMgr = new TaskManager();
-    taskMgr.addTask(1, 'task 1');
-    taskMgr.addTask(2, 'task 2');
-    taskMgr.displayTasks();
-    taskMgr.removeTask(2);
-    taskMgr.updateTaskDescription(1, 'test task');
-    console.log(taskMgr.findTask(1));
+console.log(analyzeText(` Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque convallis augue iaculis sagittis iaculis. Donec quis nulla efficitur, mattis magna in, vulputate neque. Nullam semper, sem eu pharetra dignissim, elit risus imperdiet libero, vitae malesuada nisi sem et quam. Donec a magna vel leo egestas mattis in vel est. Quisque laoreet nibh nisi, at molestie ante rhoncus a. Fusce nec aliquet enim. Nam ultrices nec risus vitae ultrices. Duis ultricies sed augue non fringilla. Quisque eu dolor mi.
+
+Cras id tellus mauris. Donec ultricies et felis ut pretium. Ut faucibus aliquet congue. Morbi id odio mi. Etiam facilisis efficitur pellentesque. Vivamus dictum imperdiet velit quis facilisis. Duis enim mi, sollicitudin lacinia sem a, vestibulum fringilla nibh.
+
+Nam libero dui, pellentesque nec feugiat sed, varius ac massa. Pellentesque quis tempus lacus. Quisque quis velit ac felis eleifend convallis non vel turpis. Etiam luctus purus ultricies sapien euismod egestas. Morbi tempor risus eget nibh egestas vehicula. Pellentesque viverra metus magna, vel volutpat est mollis eget. Proin et facilisis nisl. Fusce porttitor congue felis sed elementum. Curabitur in erat ac tortor tempus lacinia. Ut et augue non lorem hendrerit egestas. Nulla facilisi. Phasellus ornare faucibus ex, sed rhoncus nisi pharetra et. Maecenas ac tincidunt sapien, vel tempor quam. `));
 
 } catch (e) {
   console.error(e);
