@@ -1,32 +1,81 @@
 'use strict';
 
 (() => {
-const getObjectTracker = () => {
-  const trackedObjects = new WeakSet();
+  class TaskManager {
+    #tasks = new Map();
 
-  return (obj) => {
-    if (typeof obj !== 'object') {
-      throw new Error('Param is not an object');
+    #sanitizeDescription = (desc) => {
+      if (typeof desc !== 'string') {
+        throw new Error('Description must be a valid string');
+      } else if (!desc.trim().length) {
+        throw new Error('Can not process empty task');
+      }
+      
+      return desc.trim();
     }
 
-    if (trackedObjects.has(obj)) {
-      return true;
+    #validateId = (id) => {
+      if (!['string', 'number', 'symbol'].includes(typeof id)) {
+        throw new Error('Unsupported id type');
+      }
+    }
+    
+    addTask = (id, description) => {
+      this.#validateId(id);
+      if (this.#tasks.has(id)) {
+        throw new Error('Task already exists');
+      }
+
+      const desc = this.#sanitizeDescription(description);
+
+      this.#tasks.set(id, desc);
     }
 
-    trackedObjects.add(obj);
+    removeTask = (id) => {
+      this.#validateId(id);
+      if (!this.#tasks.has(id)) {
+        throw new Error('Task with this id not found');
+      }
 
-    return false;
-  };
-}
+      this.#tasks.delete(id);
+    }
+
+    findTask = (id) => {
+      this.#validateId(id);
+      if (!this.#tasks.has(id)) {
+        throw new Error('Task with this id not found');
+      }
+
+      return this.#tasks.get(id);
+    }
+
+    displayTasks = () => {
+      for (const [id, desc] of this.#tasks.entries()) {
+        console.log(`ID: ${id}; Task: ${desc}`);
+      }
+    }
+
+    updateTaskDescription  = (id, description) => {
+      this.#validateId(id);
+      if (!this.#tasks.has(id)) {
+        throw new Error('Task with this id not found');
+      }
+
+      const desc = this.#sanitizeDescription(description);
+
+      this.#tasks.set(id, desc);
+    }
+  }
 
 try {
-  const trackObjects = getObjectTracker();
-  const user1 = {name: 'user 1'};
-  const user2 = {name: 'user 2'};
+    const taskMgr = new TaskManager();
+    taskMgr.addTask(1, 'task 1');
+    taskMgr.addTask(2, 'task 2');
+    taskMgr.displayTasks();
+    taskMgr.removeTask(2);
+    taskMgr.updateTaskDescription(1, 'test task');
+    console.log(taskMgr.findTask(1));
 
-  console.log(trackObjects(user1));
-  console.log(trackObjects(user1));
-  console.log(trackObjects(user2));
 } catch (e) {
   console.error(e);
 }
