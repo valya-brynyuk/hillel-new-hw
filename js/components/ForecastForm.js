@@ -1,16 +1,17 @@
 const INVALID_CLASS = 'is-invalid';
 
-class FindForm {
-  static EVENT_POST_LOADED = 'EVENT_POST_LOADED';
+class ForecastForm {
+  static EVENT_DATA_LOADED = 'EVENT_DATA_LOADED';
+  static EVENT_DATA_FAILED = 'EVENT_DATA_FAILED';
 
   #form = null;
   #input = null;
   #errorElem = null;
   #submitButton = null;
-  #getPostService = null;
+  #forecastService = null;
   #eventBus = null;
 
-  constructor(form, getPostService, eventBus) {
+  constructor(form, forecastService, eventBus) {
     if (!form || !(form instanceof HTMLFormElement)) {
       throw new Error('form must be a valid form element');
     }
@@ -30,9 +31,9 @@ class FindForm {
       throw new Error('Can not find submit button');
     }
 
-    this.#getPostService = getPostService;
-    if (!this.#getPostService || typeof this.#getPostService !== 'function' ) {
-      throw new Error('Post service must be a valid function');
+    this.#forecastService = forecastService;
+    if (!this.#forecastService || typeof this.#forecastService !== 'function' ) {
+      throw new Error('Forecast service must be a valid function');
     }
 
     this.#eventBus = eventBus;
@@ -50,9 +51,7 @@ class FindForm {
   #getValidPayload = () => {
     const query = this.#input.value.trim();
     if (!query.length) {
-      throw new Error('Post id is required field');
-    } else if (!Number.isFinite(+query) || +query < 1 || +query > 100) {
-      throw new Error('Post id must be a valid number between 1 and 100');
+      throw new Error('City name is required field');
     }
 
     return {
@@ -95,22 +94,25 @@ class FindForm {
     event.preventDefault();
     event.stopPropagation();
 
+    this.request();
+  }
+
+  request = () => {
     this.#setError('');
     this.#startLoading();
-
 
     Promise.resolve()
       .then(() => {
         const payload = this.#getValidPayload();
 
-        return this.#getPostService(payload.query);
+        return this.#forecastService(payload.query);
       })
       .then((data) => {
-        this.#eventBus.trigger(FindForm.EVENT_POST_LOADED, data);
-        this.#input.value = '';
+        this.#eventBus.trigger(ForecastForm.EVENT_DATA_LOADED, data);
       })
       .catch((e) => {
         this.#setError(e.message);
+        this.#eventBus.trigger(ForecastForm.EVENT_DATA_FAILED);
       })
       .finally(() => {
         this.#stopLoading();

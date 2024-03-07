@@ -12,62 +12,72 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <div class="card mt-3">
-                <form action="" method="post" class="card-body" data-role="post-form">
+            <div class="card mt-3 ">
+                <form action="" method="post" class="card-body" data-role="forecast-form">
                     <div class="input-group mb-3 has-validation">
-                        <input type="text" class="form-control" placeholder="Type post id" data-role="input">
-                        <button class="btn btn-outline-secondary" type="button" data-role="submit-button" id="button-addon2">Search</button>
+                        <input type="text" class="form-control" placeholder="Type city name" data-role="input">
+                        <button class="btn btn-outline-secondary" type="submit" data-role="submit-button" id="button-addon2">Get forecast</button>
                         <div class="invalid-feedback" data-role="error-elem"></div>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" data-role="post-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" >
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" data-role="post-title"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-role="close-btn"></button>
-            </div>
-            <div class="modal-body" >
-                <p data-role="post-content"></p>
-                <hr>
-                <div data-role="comments">
-                    <div data-role="comments-list"></div>
-                    <template data-role="item-template">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title" data-role="name"></h5>
-                                <p class="card-text" data-role="body"></p>
-                            </div>
-                        </div>
-                    </template>
-                    <template data-role="empty-block">
-                        <p>No comments found</p>
-                    </template>
+                <div class="card-footer text-muted">
+                    <div class="input-group " data-role="countdown">
+                        <input type="text" class="form-control" readonly value="00:00" data-role="time">
+                        <button class="btn btn-danger" type="button" data-role="stop-btn" disabled >Stop timer</button>
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-role="load-comments-btn">Load comments</button>
+
+            <div class="card mt-3 d-none" data-role="forecast-result">
+                <div class="card-header" data-role="name">
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr>
+                            <td>Temperature</td>
+                            <td data-role="temp"></td>
+                        </tr>
+                        <tr>
+                            <td>Pressure</td>
+                            <td data-role="pressure"></td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td data-role="desc"></td>
+                        </tr>
+                        <tr>
+                            <td>Humidity</td>
+                            <td data-role="humidity"></td>
+                        </tr>
+                        <tr>
+                            <td>Wind Speed</td>
+                            <td data-role="speed"></td>
+                        </tr>
+                        <tr>
+                            <td>Wind direction</td>
+                            <td data-role="deg"></td>
+                        </tr>
+                        <tr>
+                            <td>Icon</td>
+                            <td><img src="" alt="icon" data-role="icon"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 
-<script src="js/models/Post.js"></script>
-<script src="js/models/Comment.js"></script>
-<script src="js/services/post.js"></script>
-<script src="js/services/comment.js"></script>
+<script src="js/models/Forecast.js"></script>
+<script src="js/services/forecast.js"></script>
 <script src="js/services/EventBus.js"></script>
 <script src="js/services/index.js"></script>
-<script src="js/components/FindForm.js"></script>
-<script src="js/components/PostModal.js"></script>
-<script src="js/components/Comment/CommentItem.js"></script>
-<script src="js/components/Comment/Comments.js"></script>
+<script src="js/components/ForecastForm.js"></script>
+<script src="js/components/ForecastResult.js"></script>
+<script src="js/components/Countdown.js"></script>
 <script src="js/script.js"></script>
 
 </body>
